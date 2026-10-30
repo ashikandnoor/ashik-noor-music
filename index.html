@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100d1b"><title>Ashik ♡ Noor — Together</title>
+<style>
+:root{--bg:#100d1b;--card:#1c1729;--pink:#ff77a8;--lav:#c7b5ff;--text:#fff7fc;--muted:#b8adc9}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(ellipse at 15% 0%,#492044 0,transparent 42%),radial-gradient(ellipse at 100% 20%,#25235b 0,transparent 35%),var(--bg)}
+main{max-width:850px;margin:auto;padding:26px 18px 50px}.top{text-align:center;padding:28px 0 22px}.heart{font-size:35px;color:var(--pink);filter:drop-shadow(0 0 16px #ff77a866)}h1{font-size:clamp(2rem,7vw,3.5rem);line-height:1.05;margin:8px 0 12px;letter-spacing:-1.5px}h1 span{color:var(--pink)}.sub{color:var(--muted);margin:0}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid #ffffff20;border-radius:999px;padding:8px 13px;color:#e6d9ff;background:#ffffff08;font-size:.85rem;margin-top:18px}.dot{width:8px;height:8px;border-radius:50%;background:#ffc0d6;box-shadow:0 0 10px #ff77a8}
+.card{background:#ffffff0b;border:1px solid #ffffff17;border-radius:22px;padding:20px;margin:14px 0;backdrop-filter:blur(10px);box-shadow:0 14px 50px #0002}.card h2{font-size:1.05rem;margin:0 0 14px}.row{display:flex;gap:10px;flex-wrap:wrap}input,select{background:#100d1b;color:var(--text);border:1px solid #ffffff26;border-radius:12px;padding:13px 14px;font:inherit;min-width:0}input{flex:1;width:100%}button{border:0;border-radius:12px;padding:13px 17px;font:inherit;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--pink),#d9a6ff);color:#241126}button.secondary{background:#ffffff12;color:var(--text);border:1px solid #ffffff20}button:active{transform:scale(.98)}.hint{color:var(--muted);font-size:.88rem;line-height:1.5;margin:10px 0 0}.player{aspect-ratio:16/9;background:#08070e;border-radius:16px;overflow:hidden;display:grid;place-items:center;text-align:center;color:var(--muted)}.player iframe{width:100%;height:100%;border:0}.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px}.now{font-weight:700;font-size:1.05rem;margin:0 0 4px}.status{color:var(--muted);font-size:.88rem;margin-top:10px;min-height:1.3em}.steps{padding-left:20px;color:var(--muted);line-height:1.65}.steps strong{color:var(--text)}.footer{text-align:center;color:var(--muted);font-size:.8rem;padding-top:15px}a{color:var(--lav)}.warning{border-left:3px solid var(--pink);padding-left:12px;color:#f2d9e8;font-size:.9rem;line-height:1.55}
+</style>
+</head>
+<body><main>
+<header class="top"><div class="heart">♡</div><h1>Ashik <span>♥</span> Noor</h1><p class="sub">Different countries. One little listening room.</p><div class="badge"><span class="dot"></span><span id="connection">Our room is ready to set up</span></div></header>
+<section class="card"><h2>🎵 Choose a song</h2><div class="row"><input id="songUrl" placeholder="Paste a YouTube song link…" aria-label="YouTube song link"><button id="load">Add song</button></div><p class="hint">Use a regular YouTube video link. Both of you should open this same website and use the same room code.</p></section>
+<section class="card"><h2>💌 Your listening room</h2><div class="row"><input id="room" value="ashik-noor" aria-label="Room code" maxlength="40"><button class="secondary" id="join">Join room</button><button class="secondary" id="copy">Copy room code</button></div><p class="hint">Room code: share it privately with each other. Anyone who knows it may be able to control the shared playback.</p></section>
+<section class="card"><p class="now" id="songTitle">Your song will appear here</p><p class="hint" id="songInfo">Paste a YouTube link above to get started.</p><div class="player" id="player"><div><div style="font-size:2.3rem">♫</div><p>The music player will appear here</p></div></div><div class="controls"><button id="play">▶ Play together</button><button class="secondary" id="pause">Ⅱ Pause together</button><button class="secondary" id="restart">↺ Start again</button></div><p class="status" id="status">Add a song, then press play on both devices if the browser asks.</p></section>
+<section class="card"><h2>✨ A tiny setup guide</h2><ol class="steps"><li><strong>Ashik:</strong> finish the one-time setup described in README.txt and publish the site.</li><li><strong>Noor:</strong> open the same published website from Pakistan.</li><li>Both enter the same room code (default: <strong>ashik-noor</strong>).</li><li>Paste a YouTube link and tap <strong>Add song</strong>. Playback commands are shared through the realtime room.</li></ol><p class="warning">Honest note: no website can promise literally zero delay across India and Pakistan. This prototype synchronizes the selected video and play/pause/seek commands, but internet latency and YouTube buffering can cause a small difference. Each device may need one tap to allow playback.</p></section>
+<div class="footer">Made with love, for Ashik & Noor · Keep the room code between you two ♡</div>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, set, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// ONE-TIME SETUP: replace these values with your Firebase project's web config.
+// Keep Realtime Database rules restricted to your room/auth strategy before sharing publicly.
+const firebaseConfig = {
+  apiKey: "PASTE_FIREBASE_API_KEY",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  databaseURL: "PASTE_REALTIME_DATABASE_URL",
+  projectId: "PASTE_PROJECT_ID",
+  appId: "PASTE_FIREBASE_APP_ID"
+};
+const $=id=>document.getElementById(id); let db=null, roomRef=null, applyingRemote=false, player=null, currentVideo=null, ready=false;
+function message(t){$("status").textContent=t}
+function extractId(url){try{const u=new URL(url);if(u.hostname.includes("youtu.be"))return u.pathname.slice(1).split("/")[0];if(u.hostname.includes("youtube.com")){if(u.pathname==="/watch")return u.searchParams.get("v");const m=u.pathname.match(/\/(embed|shorts)\/([^/?]+)/);if(m)return m[2]}}catch{}return null}
+function roomPath(){return $("room").value.trim().replace(/[.#$[\]/]/g,"-").slice(0,40)||"ashik-noor"}
+function youtubeEmbed(id){return `https://www.youtube-nocookie.com/embed/${id}?enablejsapi=1&origin=${encodeURIComponent(location.origin)}&playsinline=1`}
+function mount(id){currentVideo=id;$("player").innerHTML=`<iframe id="yt" title="Shared YouTube music video" src="${youtubeEmbed(id)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;$("songTitle").textContent="🎶 Your shared song";$("songInfo").textContent="Video loaded. Playback may require a tap on each device.";ready=true}
+function setupDb(){if(Object.values(firebaseConfig).some(v=>String(v).startsWith("PASTE_"))){$("connection").textContent="Demo mode · Firebase setup needed";message("The interface is ready. Complete the one-time Firebase setup in README.txt to sync devices.");return false}try{db=getDatabase(initializeApp(firebaseConfig));joinRoom();$("connection").textContent="Connecting to your room…";return true}catch(e){message("Connection setup issue: "+e.message);return false}}
+function joinRoom(){if(!db)return;roomRef=ref(db,"rooms/"+roomPath());onValue(roomRef,s=>{const data=s.val();$("connection").textContent="Connected to shared room";if(!data)return;if(data.videoId&&data.videoId!==currentVideo)mount(data.videoId);if(data.command&&!applyingRemote){applyingRemote=true;applyCommand(data.command).finally(()=>setTimeout(()=>applyingRemote=false,350))}},e=>{ $("connection").textContent="Could not connect";message(e.message)})}
+async function publish(data){if(!db||!roomRef){message("To enable cross-device sync, finish Firebase setup in README.txt.");return}try{await update(roomRef,{...data,updatedAt:serverTimestamp()});message("Shared with Noor ♡")}catch(e){message("Could not sync: "+e.message)}}
+function sendCommand(action){if(!currentVideo){message("Add a YouTube song first.");return}publish({command:{action,at:Date.now(),videoId:currentVideo}})}
+async function applyCommand(cmd){if(cmd.videoId&&cmd.videoId!==currentVideo)mount(cmd.videoId);if(!currentVideo)return;const frame=$("yt");if(!frame)return;const fn=cmd.action==="play"?"playVideo":cmd.action==="pause"?"pauseVideo":"seekTo";const args=cmd.action==="restart"?"0,true":"";try{frame.contentWindow.postMessage(JSON.stringify({event:"command",func:fn,args:cmd.action==="restart"?[0,true]:[]}),"*");if(cmd.action==="play")frame.contentWindow.postMessage(JSON.stringify({event:"command",func:"playVideo",args:[]}),"*")}catch{} }
+$("load").onclick=()=>{const id=extractId($("songUrl").value.trim());if(!id){message("That link doesn't look like a YouTube video. Try another link.");return}mount(id);publish({videoId:id,command:{action:"pause",at:Date.now(),videoId:id}})};
+$("join").onclick=()=>{if(db){joinRoom();message("Joined room: "+roomPath())}else message("Finish Firebase setup in README.txt first.")};
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText(roomPath());message("Room code copied ♡")}catch{message("Your room code is: "+roomPath())}};
+$("play").onclick=()=>sendCommand("play");$("pause").onclick=()=>sendCommand("pause");$("restart").onclick=()=>sendCommand("restart");
+setupDb();
+</script></body></html>
