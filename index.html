@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100d1b">
+<title>Ashik ♡ Noor — Together</title>
+
+<style>
+:root {
+  --bg:#100d1b;
+  --pink:#ff77a8;
+  --text:#fff7fc;
+  --muted:#b8adc9;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse at 15% 0%,#492044 0,transparent 42%),
+    radial-gradient(ellipse at 100% 20%,#25235b 0,transparent 35%),
+    var(--bg);
+}
+main {
+  max-width:850px;
+  margin:auto;
+  padding:22px 14px 40px;
+}
+.top { text-align:center; padding:24px 0 20px; }
+.heart { font-size:35px; color:var(--pink); }
+h1 {
+  font-size:clamp(2rem,7vw,3.5rem);
+  line-height:1.05;
+  margin:8px 0 12px;
+}
+h1 span { color:var(--pink); }
+.sub { color:var(--muted); margin:0; }
+.badge {
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  border:1px solid #ffffff20;
+  border-radius:999px;
+  padding:8px 13px;
+  color:#e6d9ff;
+  background:#ffffff08;
+  font-size:.85rem;
+  margin-top:18px;
+}
+.dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ffc0d6;
+}
+.card {
+  background:#ffffff0b;
+  border:1px solid #ffffff17;
+  border-radius:22px;
+  padding:18px;
+  margin:14px 0;
+  box-shadow:0 14px 50px #0002;
+}
+.card h2 { font-size:1.05rem; margin:0 0 14px; }
+.row { display:flex; gap:10px; flex-wrap:wrap; }
+input,select {
+  background:#100d1b;
+  color:var(--text);
+  border:1px solid #ffffff26;
+  border-radius:12px;
+  padding:13px 14px;
+  font:inherit;
+  min-width:0;
+  flex:1;
+  width:100%;
+}
+select { cursor:pointer; }
+button {
+  border:0;
+  border-radius:12px;
+  padding:13px 17px;
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--pink),#d9a6ff);
+  color:#241126;
+}
+button.secondary {
+  background:#ffffff12;
+  color:var(--text);
+  border:1px solid #ffffff20;
+}
+button:disabled { opacity:.5; cursor:not-allowed; }
+.hint {
+  color:var(--muted);
+  font-size:.88rem;
+  line-height:1.5;
+  margin:10px 0 0;
+}
+.player {
+  aspect-ratio:16/9;
+  background:#08070e;
+  border-radius:16px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:var(--muted);
+}
+.player iframe { width:100%; height:100%; border:0; }
+.controls {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+.now { font-weight:700; font-size:1.05rem; margin:0 0 4px; }
+.status {
+  color:var(--muted);
+  font-size:.88rem;
+  margin-top:10px;
+  min-height:1.3em;
+}
+.steps { padding-left:20px; color:var(--muted); line-height:1.65; }
+.steps strong { color:var(--text); }
+.footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:.8rem;
+  padding-top:15px;
+}
+.warning {
+  border-left:3px solid var(--pink);
+  padding-left:12px;
+  color:#f2d9e8;
+  font-size:.9rem;
+  line-height:1.55;
+}
+
+/* Chat design */
+.chat-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.chat-top h2 { margin:0; }
+.online-list {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:.82rem;
+}
+.person {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+.online-dot {
+  width:8px;
+  height:8px;
+  display:inline-block;
+  border-radius:50%;
+  background:#6f7484;
+}
+.online-dot.online { background:#64e6a0; }
+.chat-box {
+  height:340px;
+  overflow-y:auto;
+  border:1px solid #ffffff16;
+  background:#09071280;
+  border-radius:16px;
+  padding:13px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.empty-chat {
+  margin:auto;
+  text-align:center;
+  color:var(--muted);
+  line-height:1.6;
+  padding:15px;
+}
+.chat-message {
+  max-width:86%;
+  min-width:90px;
+  padding:10px 12px;
+  border-radius:16px;
+  overflow-wrap:anywhere;
+}
+.chat-message.mine {
+  align-self:flex-end;
+  background:linear-gradient(135deg,#8d4b82,#6c4e99);
+  border-bottom-right-radius:4px;
+}
+.chat-message.theirs {
+  align-self:flex-start;
+  background:#ffffff12;
+  border:1px solid #ffffff12;
+  border-bottom-left-radius:4px;
+}
+.message-head {
+  font-size:.76rem;
+  color:#ffd5e9;
+  margin-bottom:5px;
+  font-weight:700;
+}
+.message-body {
+  white-space:pre-wrap;
+  line-height:1.45;
+  font-size:.95rem;
+}
+.message-time {
+  color:#d2c3dc;
+  font-size:.68rem;
+  margin-top:5px;
+  text-align:right;
+}
+.chat-form { margin-top:12px; }
+.chat-form input { flex:1 1 180px; }
+.chat-note {
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.5;
+  margin:10px 0 0;
+}
+@media(max-width:430px) {
+  .card { padding:14px; }
+  .chat-box { height:310px; }
+  .chat-message { max-width:92%; }
+  .row button { flex:1 1 auto; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<header class="top">
+  <div class="heart">♡</div>
+  <h1>Ashik <span>♥</span> Noor</h1>
+  <p class="sub">Different countries. One little listening room.</p>
+  <div class="badge">
+    <span class="dot" id="connectionDot"></span>
+    <span id="connection">Signing in…</span>
+  </div>
+</header>
+
+<section class="card">
+  <h2>🎵 Choose a song</h2>
+  <div class="row">
+    <input id="songUrl" placeholder="Paste a YouTube song link…"
+      aria-label="YouTube song link">
+    <button id="load">Add song</button>
+  </div>
+  <p class="hint">Both people should open this website and use the same room code.</p>
+</section>
+
+<section class="card">
+  <h2>💌 Your listening room</h2>
+  <div class="row">
+    <input id="room" value="ashik-noor" aria-label="Room code" maxlength="40">
+    <button class="secondary" id="join">Join room</button>
+    <button class="secondary" id="copy">Copy room code</button>
+  </div>
+  <p class="hint">A room code is not a password. Don't share sensitive information here.</p>
+</section>
+
+<section class="card">
+  <p class="now" id="songTitle">Your song will appear here</p>
+  <p class="hint" id="songInfo">Paste a YouTube link above to get started.</p>
+  <div class="player" id="player">
+    <div><div style="font-size:2.3rem">♫</div><p>The music player will appear here</p></div>
+  </div>
+  <div class="controls">
+    <button id="play">▶ Play together</button>
+    <button class="secondary" id="pause">Ⅱ Pause together</button>
+    <button class="secondary" id="restart">↺ Start again</button>
+  </div>
+  <p class="status" id="status">Connecting…</p>
+</section>
+
+<section class="card">
+  <div class="chat-top">
+    <h2>💗 Our little chat</h2>
+    <div class="online-list">
+      <span class="person">
+        <span class="online-dot" id="ashikDot"></span>
+        Ashik <span id="ashikStatus">Offline</span>
+      </span>
+      <span class="person">
+        <span class="online-dot" id="noorDot"></span>
+        Noor <span id="noorStatus">Offline</span>
+      </span>
+    </div>
+  </div>
+
+  <label for="identity" class="hint">You are:</label>
+  <div class="row" style="margin:7px 0 12px">
+    <select id="identity" aria-label="Choose your display name">
+      <option value="Ashik">Ashik 💙</option>
+      <option value="Noor">Noor 💗</option>
+    </select>
+  </div>
+
+  <div id="chatBox" class="chat-box" aria-live="polite">
+    <div class="empty-chat" id="chatEmpty">
+      💌 Your messages will appear here.<br>
+      Say something sweet to begin.
+    </div>
+  </div>
+
+  <form id="chatForm" class="chat-form">
+    <div class="row">
+      <input id="chatInput" maxlength="1000"
+        placeholder="Write a message… 💕"
+        autocomplete="off" aria-label="Chat message">
+      <button id="sendButton" type="submit">Send 💌</button>
+    </div>
+  </form>
+
+  <p class="chat-note" id="chatStatus">Connecting to chat…</p>
+  <p class="chat-note">Display names are not verified identities. Messages are stored in Firebase. Do not send passwords or sensitive personal information.</p>
+</section>
+
+<section class="card">
+  <h2>✨ How to use it</h2>
+  <ol class="steps">
+    <li>Both open this published website.</li>
+    <li>Use the same room code: <strong>ashik-noor</strong>.</li>
+    <li>Select your display name: Ashik or Noor.</li>
+    <li>Paste a YouTube link and tap <strong>Add song</strong>.</li>
+    <li>Send messages and use the shared music controls.</li>
+  </ol>
+  <p class="warning">Playback can have a small delay due to internet latency and YouTube buffering. Each device may need one tap to allow playback.</p>
+</section>
+
+<div class="footer">Made with love, for Ashik & Noor ♡</div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getDatabase, ref, onValue, update, set, push,
+  onDisconnect, onChildAdded, query, limitToLast, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDWtpF32T4_0Ta3s0Zd5QVsrumH4mfNqvY",
+  authDomain: "ashik-noor-music.firebaseapp.com",
+  databaseURL: "https://ashik-noor-music-default-rtdb.firebaseio.com",
+  projectId: "ashik-noor-music",
+  storageBucket: "ashik-noor-music.firebasestorage.app",
+  messagingSenderId: "229811159299",
+  appId: "1:229811159299:web:75142a1256370f24d06936",
+  measurementId: "G-ZWXGN2F9XZ"
+};
+
+const $ = id => document.getElementById(id);
+
+let db = null;
+let authUser = null;
+let roomRef = null;
+let currentVideo = null;
+let player = null;
+let ready = false;
+let applyingRemote = false;
+let lastCommandAt = 0;
+let pendingCommand = null;
+let roomUnsubscribers = [];
+let presenceUnsubscribe = null;
+let onlineUnsubscribe = null;
+let chatUnsubscribe = null;
+let displayedMessages = new Set();
+let presenceGeneration = 0;
+
+function message(text) {
+  $("status").textContent = text;
+}
+
+function setConnection(text, connected = false) {
+  $("connection").textContent = text;
+  $("connectionDot").style.background =
+    connected ? "#64e6a0" : "#ffc0d6";
+}
+
+function setChatStatus(text) {
+  $("chatStatus").textContent = text;
+}
+
+function cleanRoomName() {
+  return $("room").value.trim()
+    .replace(/[.#$[\]/]/g, "-")
+    .slice(0, 40) || "ashik-noor";
+}
+
+function roomPath() {
+  return "rooms/" + cleanRoomName();
+}
+
+function extractId(input) {
+  try {
+    const url = new URL(input);
+    let id = null;
+
+    if (url.hostname === "youtu.be" ||
+        url.hostname.endsWith(".youtu.be")) {
+      id = url.pathname.slice(1).split("/")[0];
+    } else if (
+      url.hostname === "youtube.com" ||
+      url.hostname.endsWith(".youtube.com")
+    ) {
+      if (url.pathname === "/watch") {
+        id = url.searchParams.get("v");
+      } else {
+        const match = url.pathname.match(/\/(embed|shorts|live)\/([^/?]+)/);
+        if (match) id = match[2];
+      }
+    }
+
+    return id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+function loadYouTubeAPI() {
+  return new Promise((resolve, reject) => {
+    if (window.YT && window.YT.Player) {
+      resolve();
+      return;
+    }
+
+    window.onYouTubeIframeAPIReady = resolve;
+
+    let script = document.querySelector(
+      'script[src="https://www.youtube.com/iframe_api"]'
+    );
+
+    if (!script) {
+      script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.onerror = () => reject(new Error("YouTube API failed"));
+      document.head.appendChild(script);
+    }
+
+    setTimeout(() => {
+      if (window.YT && window.YT.Player) resolve();
+      else reject(new Error("YouTube API timed out"));
+    }, 15000);
+  });
+}
+async function mountVideo(id) {
+  if (!id || (currentVideo === id && player)) return;
+
+  currentVideo = id;
+  ready = false;
+
+  if (player && typeof player.destroy === "function") {
+    try { player.destroy(); } catch {}
+  }
+
+  player = null;
+  $("player").innerHTML =
+    '<div id="yt-player" style="width:100%;height:100%"></div>';
+
+  $("songTitle").textContent = "🎶 Shared YouTube song";
+  $("songInfo").textContent =
+    "Video ID: " + id + " · Playback may require a tap on each device.";
+
+  try {
+    await loadYouTubeAPI();
+
+    player = new window.YT.Player("yt-player", {
+      videoId: id,
+      playerVars: {
+        playsinline: 1,
+        origin: location.origin,
+        rel: 0
+      },
+      events: {
+        onReady: () => {
+          ready = true;
+          if (pendingCommand) {
+            const command = pendingCommand;
+            pendingCommand = null;
+            applyCommand(command);
+          }
+        },
+        onError: event => {
+          message("YouTube player error " + event.data + ". Try another video.");
+        }
+      }
+    });
+  } catch {
+    message("Could not load YouTube. Check your connection and reload.");
+  }
+}
+
+async function applyCommand(command) {
+  if (!command || !command.action) return;
+
+  if (command.videoId && command.videoId !== currentVideo) {
+    pendingCommand = command;
+    await mountVideo(command.videoId);
+    return;
+  }
+
+  if (!player || !ready) {
+    pendingCommand = command;
+    return;
+  }
+
+  applyingRemote = true;
+
+  try {
+    if (command.action === "play") {
+      player.playVideo();
+    } else if (command.action === "pause") {
+      player.pauseVideo();
+    } else if (command.action === "restart") {
+      player.seekTo(0, true);
+      player.playVideo();
+    }
+  } finally {
+    setTimeout(() => {
+      applyingRemote = false;
+    }, 700);
+  }
+}
+
+function clearRoomListeners() {
+  roomUnsubscribers.forEach(unsubscribe => {
+    try { unsubscribe(); } catch {}
+  });
+  roomUnsubscribers = [];
+
+  if (presenceUnsubscribe) {
+    presenceUnsubscribe();
+    presenceUnsubscribe = null;
+  }
+
+  if (onlineUnsubscribe) {
+    onlineUnsubscribe();
+    onlineUnsubscribe = null;
+  }
+
+  if (chatUnsubscribe) {
+    chatUnsubscribe();
+    chatUnsubscribe = null;
+  }
+}
+
+/* Display incoming messages safely */
+
+function formatTime(value) {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return "Just now";
+  }
+
+  return new Date(value).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function addChatMessage(key, data) {
+  if (displayedMessages.has(key)) return;
+  displayedMessages.add(key);
+
+  const empty = $("chatEmpty");
+  if (empty) empty.remove();
+
+  const bubble = document.createElement("div");
+  const mine = authUser && data.uid === authUser.uid;
+
+  bubble.className = "chat-message " + (mine ? "mine" : "theirs");
+
+  const head = document.createElement("div");
+  head.className = "message-head";
+  head.textContent = data.name === "Noor" ? "Noor 💗" : "Ashik 💙";
+
+  const body = document.createElement("div");
+  body.className = "message-body";
+  body.textContent = typeof data.text === "string"
+    ? data.text.slice(0, 1000)
+    : "";
+
+  const time = document.createElement("div");
+  time.className = "message-time";
+  time.textContent = formatTime(data.createdAt);
+
+  bubble.append(head, body, time);
+  $("chatBox").appendChild(bubble);
+
+  while ($("chatBox").children.length > 50) {
+    $("chatBox").firstElementChild.remove();
+  }
+
+  $("chatBox").scrollTop = $("chatBox").scrollHeight;
+}
+
+function startChatListener() {
+  if (!db || !roomRef) return;
+
+  const messagesRef = ref(db, roomPath() + "/messages");
+  const recentMessages = query(messagesRef, limitToLast(50));
+
+  chatUnsubscribe = onChildAdded(
+    recentMessages,
+    snapshot => {
+      addChatMessage(snapshot.key, snapshot.val() || {});
+    },
+    error => {
+      setChatStatus(
+        "Couldn't load messages: " + (error.message || "permission denied")
+      );
+    }
+  );
+}
+
+$("chatForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const text = $("chatInput").value.trim();
+
+  if (!text) return;
+
+  if (!db || !authUser || !roomRef) {
+    setChatStatus("Wait until you're connected to the room.");
+    return;
+  }
+
+  const sendButton = $("sendButton");
+  sendButton.disabled = true;
+
+  try {
+    const messagesRef = ref(db, roomPath() + "/messages");
+
+    await push(messagesRef, {
+      uid: authUser.uid,
+      name: $("identity").value,
+      text: text.slice(0, 1000),
+      createdAt: serverTimestamp()
+    });
+
+    $("chatInput").value = "";
+    setChatStatus("Message sent 💗");
+  } catch (error) {
+    setChatStatus(
+      "Message not sent: " + (error.message || "database permission denied")
+    );
+  } finally {
+    sendButton.disabled = false;
+    $("chatInput").focus();
+  }
+});
+
+/* Online indicators */
+
+function updateOnlineDisplay(data) {
+  const people = Object.values(data || {});
+
+  const ashikOnline = people.some(
+    person => person && person.name === "Ashik" && person.online === true
+  );
+
+  const noorOnline = people.some(
+    person => person && person.name === "Noor" && person.online === true
+  );
+
+  $("ashikStatus").textContent = ashikOnline ? "Online" : "Offline";
+  $("noorStatus").textContent = noorOnline ? "Online" : "Offline";
+
+  $("ashikDot").classList.toggle("online", ashikOnline);
+  $("noorDot").classList.toggle("online", noorOnline);
+}
+
+async function setupPresence() {
+  if (!db || !authUser) return;
+
+  const generation = ++presenceGeneration;
+  const presenceRef = ref(
+    db,
+    roomPath() + "/presence/" + authUser.uid
+  );
+
+  const connectedRef = ref(db, ".info/connected");
+
+  presenceUnsubscribe = onValue(connectedRef, async snapshot => {
+    if (generation !== presenceGeneration) return;
+
+    if (snapshot.val() === true) {
+      try {
+        await onDisconnect(presenceRef).remove();
+
+        if (generation !== presenceGeneration) return;
+
+        await set(presenceRef, {
+          name: $("identity").value,
+          online: true,
+          lastSeen: serverTimestamp()
+        });
+      } catch (error) {
+        setChatStatus(
+          "Presence update failed: " +
+          (error.message || "permission denied")
+        );
+      }
+    }
+  });
+
+  onlineUnsubscribe = onValue(
+    ref(db, roomPath() + "/presence"),
+    snapshot => updateOnlineDisplay(snapshot.val() || {}),
+    () => {
+      $("ashikStatus").textContent = "Unavailable";
+      $("noorStatus").textContent = "Unavailable";
+    }
+  );
+}
+
+async function refreshPresenceName() {
+  if (!db || !authUser) return;
+
+  try {
+    await update(
+      ref(db, roomPath() + "/presence/" + authUser.uid),
+      {
+        name: $("identity").value,
+        online: true,
+        lastSeen: serverTimestamp()
+      }
+    );
+  } catch (error) {
+    setChatStatus(
+      "Couldn't update display name: " +
+      (error.message || "permission denied")
+    );
+  }
+}
+
+
+$("identity").addEventListener("change", refreshPresenceName);
+/* Join a room and synchronize music and chat */
+
+function joinRoom() {
+  if (!db || !authUser) {
+    message("Wait for sign-in to finish.");
+    return;
+  }
+
+  clearRoomListeners();
+
+  const roomName = cleanRoomName();
+  $("room").value = roomName;
+  roomRef = ref(db, "rooms/" + roomName);
+
+  currentVideo = null;
+  pendingCommand = null;
+  lastCommandAt = 0;
+  displayedMessages = new Set();
+
+  $("chatBox").innerHTML =
+    '<div class="empty-chat" id="chatEmpty">' +
+    '💌 Your messages will appear here.<br>' +
+    'Say something sweet to begin.</div>';
+
+  setConnection("Connecting to room…");
+
+  const unsubscribeRoom = onValue(
+    roomRef,
+    snapshot => {
+      setConnection("Connected to shared room", true);
+
+      const data = snapshot.val();
+      if (!data) return;
+
+      if (data.videoId && data.videoId !== currentVideo) {
+        mountVideo(data.videoId);
+      }
+
+      if (
+        data.command &&
+        Number(data.command.at || 0) > lastCommandAt
+      ) {
+        lastCommandAt = Number(data.command.at || 0);
+
+        if (!applyingRemote) {
+          applyCommand(data.command);
+        }
+      }
+    },
+    error => {
+      setConnection("Could not connect");
+      message(
+        "Database error: " +
+        (error.message || "permission denied")
+      );
+    }
+  );
+
+  roomUnsubscribers.push(unsubscribeRoom);
+
+  startChatListener();
+  setupPresence();
+
+  setChatStatus("Connected to room: " + roomName);
+  message("You're connected to your shared room ♡");
+}
+
+async function publish(data) {
+  if (!db || !roomRef) {
+    message("Not connected yet. Wait a moment and retry.");
+    return;
+  }
+
+  try {
+    await update(roomRef, {
+      ...data,
+      updatedAt: serverTimestamp()
+    });
+
+    message("Shared with Noor ♡");
+  } catch (error) {
+    message(
+      "Couldn't sync: " +
+      (error.message || "database permission denied")
+    );
+  }
+}
+
+/* Song selection */
+
+$("load").addEventListener("click", async () => {
+  const id = extractId($("songUrl").value.trim());
+
+  if (!id) {
+    message("That doesn't look like a valid YouTube video link.");
+    return;
+  }
+
+  await mountVideo(id);
+
+  await publish({
+    videoId: id,
+    command: {
+      action: "pause",
+      at: Date.now(),
+      videoId: id
+    }
+  });
+});
+
+/* Room buttons */
+
+$("join").addEventListener("click", joinRoom);
+
+$("copy").addEventListener("click", async () => {
+  const code = cleanRoomName();
+
+  try {
+    await navigator.clipboard.writeText(code);
+    message("Room code copied ♡");
+  } catch {
+    message("Your room code is: " + code);
+  }
+});
+
+/* Shared music controls */
+
+$("play").addEventListener("click", () => {
+  if (!currentVideo) {
+    message("Add a YouTube song first.");
+    return;
+  }
+
+  const command = {
+    action: "play",
+    at: Date.now(),
+    videoId: currentVideo
+  };
+
+  publish({ command });
+
+  if (player && ready) player.playVideo();
+});
+
+$("pause").addEventListener("click", () => {
+  if (!currentVideo) {
+    message("Add a YouTube song first.");
+    return;
+  }
+
+  const command = {
+    action: "pause",
+    at: Date.now(),
+    videoId: currentVideo
+  };
+
+  publish({ command });
+
+  if (player && ready) player.pauseVideo();
+});
+
+$("restart").addEventListener("click", () => {
+  if (!currentVideo) {
+    message("Add a YouTube song first.");
+    return;
+  }
+
+  const command = {
+    action: "restart",
+    at: Date.now(),
+    videoId: currentVideo
+  };
+
+  publish({ command });
+
+  if (player && ready) {
+    player.seekTo(0, true);
+    player.playVideo();
+  }
+});
+
+/* Start Firebase */
+
+async function start() {
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    db = getDatabase(app);
+
+    setConnection("Signing in anonymously…");
+
+    await signInAnonymously(auth);
+
+    authUser = auth.currentUser;
+
+    if (!authUser) {
+      throw new Error("Authentication completed without a user.");
+    }
+
+    setConnection("Signed in · connecting…");
+    joinRoom();
+
+  } catch (error) {
+    setConnection("Sign-in failed");
+
+    message(
+      "Firebase sign-in error: " +
+      (error.message ||
+        "Check Anonymous Authentication and domain settings.")
+    );
+
+    setChatStatus(
+      "Chat unavailable until Firebase sign-in works."
+    );
+  }
+}
+
+start();
+</script>
+</body>
+</html>
